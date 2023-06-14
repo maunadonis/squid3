@@ -1,0 +1,9 @@
+#!/bin/bash
+source /root/.dns/config
+screen -c "/etc/.dnsquest/.sckey" -dmS slowdns1 /etc/.dnsquest/dnstt-server -udp :5300 -privkey $privkey $domain 127.0.0.1:22 &>/dev/null
+if [[ $dnsresolvertype == "doh" ]]
+then
+screen -c "/etc/.dnsquest/.sckey" -dmS slowdns2 /etc/.dnsquest/dnstt-client -doh $dnsresolver -pubkey $pubkey $domain 127.0.0.1:2222 &>/dev/null	
+else
+screen -c "/etc/.dnsquest/.sckey" -dmS slowdns2 /etc/.dnsquest/dnstt-client -udp $dnsresolver -pubkey $pubkey $domain 127.0.0.1:2222 &>/dev/null
+fi
